@@ -44,19 +44,30 @@ public class WeatherActivity extends AppCompatActivity {
 
     private TextView titleCity;
 
+//    添加经纬度
+    private TextView posiTion;
+
     private TextView titleUpdateTime;
 
     private TextView degreeText;
 
     private TextView weatherInfoText;
 
+    private TextView WindSpeed;
+
     private LinearLayout forecastLayout;
 
     private TextView aqiText;
 
     private TextView pm25Text;
+//    添加空气质量
+    private TextView qultText;
 
+    private TextView airText;
+//    添加空气质量评价和流感建议
     private TextView comfortText;
+
+    private TextView fluText;
 
     private TextView carWashText;
 
@@ -80,13 +91,22 @@ public class WeatherActivity extends AppCompatActivity {
         bingPicImg = (ImageView) findViewById(R.id.bing_pic_img);
         weatherLayout = (ScrollView) findViewById(R.id.weather_layout);
         titleCity = (TextView) findViewById(R.id.title_city);
+//        初始化经纬度控件
+        posiTion = (TextView) findViewById(R.id.position);
         titleUpdateTime = (TextView) findViewById(R.id.title_update_time);
         degreeText = (TextView) findViewById(R.id.degree_text);
         weatherInfoText = (TextView) findViewById(R.id.weather_info_text);
+//        初始化风速控件
+        WindSpeed = (TextView) findViewById(R.id.wind_speed);
         forecastLayout = (LinearLayout) findViewById(R.id.forecast_layout);
         aqiText = (TextView) findViewById(R.id.aqi_text);
+//        初始化空气质量控件
+        qultText = (TextView)findViewById(R.id.quality_text);
         pm25Text = (TextView) findViewById(R.id.pm25_text);
+//        初始化空气质量评价控件和流感指数控件
+        airText = (TextView) findViewById(R.id.air_text);
         comfortText = (TextView) findViewById(R.id.comfort_text);
+        fluText = (TextView) findViewById(R.id.flu_text);
         carWashText = (TextView) findViewById(R.id.car_wash_text);
         sportText = (TextView) findViewById(R.id.sport_text);
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
@@ -200,13 +220,21 @@ public class WeatherActivity extends AppCompatActivity {
      */
     private void showWeatherInfo(Weather weather) {
         String cityName = weather.basic.cityName;
+//        取出经纬度数据
+        String position = "经度: "+weather.basic.longtitude+" "+"纬度: "+weather.basic.latitude;
         String updateTime = weather.basic.update.updateTime.split(" ")[1];
         String degree = weather.now.temperature + "℃";
         String weatherInfo = weather.now.more.info;
+//        取出风速数据
+        String windSpeed = weather.now.wind.info;
         titleCity.setText(cityName);
+//        展示经纬度
+        posiTion.setText(position);
         titleUpdateTime.setText(updateTime);
         degreeText.setText(degree);
         weatherInfoText.setText(weatherInfo);
+//        展示风速
+        WindSpeed.setText(windSpeed);
         forecastLayout.removeAllViews();
         for (Forecast forecast : weather.forecastList) {
             View view = LayoutInflater.from(this).inflate(R.layout.forecast_item, forecastLayout, false);
@@ -222,12 +250,20 @@ public class WeatherActivity extends AppCompatActivity {
         }
         if (weather.aqi != null) {
             aqiText.setText(weather.aqi.city.aqi);
+//          展示空气质量
+            qultText.setText(weather.aqi.city.qlty);
             pm25Text.setText(weather.aqi.city.pm25);
         }
+//        取出空气质量评价和流感指数数据
+        String air ="空气质量: " + weather.suggestion.air.info;
         String comfort = "舒适度：" + weather.suggestion.comfort.info;
+        String flu = "流感指数: " + weather.suggestion.flu.info;
         Log.w("WeatherActivity", comfort);
         String carWash = "洗车指数：" + weather.suggestion.carWash.info;
         String sport = "运行建议：" + weather.suggestion.sport.info;
+//        展示空气质量评价和流感指数
+        airText.setText(air);
+        fluText.setText(flu);
         comfortText.setText(comfort);
         carWashText.setText(carWash);
         sportText.setText(sport);

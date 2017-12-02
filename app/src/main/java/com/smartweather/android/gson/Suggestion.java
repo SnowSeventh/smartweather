@@ -15,6 +15,24 @@ public class Suggestion {
 
     public Sport sport;
 
+    @SerializedName("air")
+    public Air air;
+
+    @SerializedName("flu")
+    public Flu flu;
+
+    public class Flu {
+
+        @SerializedName("txt")
+        public String info;
+    }
+
+    public class Air {
+
+        @SerializedName("txt")
+        public String info;
+    }
+
     public class Comfort {
 
         @SerializedName("txt")

@@ -13,6 +13,12 @@ public class Basic {
     @SerializedName("id")
     public String weatherId;
 
+    @SerializedName("lat")
+    public String latitude;
+
+    @SerializedName("lon")
+    public String longtitude;
+
     public Update update;
 
     public class Update {
