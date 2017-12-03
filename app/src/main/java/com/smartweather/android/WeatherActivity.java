@@ -19,7 +19,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.smartweather.android.gson.Forecast;
 import com.smartweather.android.gson.Weather;
 import com.smartweather.android.service.AutoUpdateService;
@@ -27,6 +26,8 @@ import com.smartweather.android.util.HttpUtil;
 import com.smartweather.android.util.Utility;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -44,7 +45,7 @@ public class WeatherActivity extends AppCompatActivity {
 
     private TextView titleCity;
 
-//    添加经纬度
+    //    添加经纬度
     private TextView posiTion;
 
     private TextView titleUpdateTime;
@@ -60,11 +61,11 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView aqiText;
 
     private TextView pm25Text;
-//    添加空气质量
+    //    添加空气质量
     private TextView qultText;
 
     private TextView airText;
-//    添加空气质量评价和流感建议
+    //    添加空气质量评价和流感建议
     private TextView comfortText;
 
     private TextView fluText;
@@ -111,6 +112,10 @@ public class WeatherActivity extends AppCompatActivity {
         sportText = (TextView) findViewById(R.id.sport_text);
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
+
+        //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>起始页加载图片<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<,
+        this.loadBingPic();
+
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navButton = (Button) findViewById(R.id.nav_button);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -126,10 +131,13 @@ public class WeatherActivity extends AppCompatActivity {
             weatherLayout.setVisibility(View.INVISIBLE);
             requestWeather(mWeatherId);
         }
+
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 requestWeather(mWeatherId);
+                //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>下拉更新背景<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                loadBingPic();
             }
         });
         navButton.setOnClickListener(new View.OnClickListener() {
@@ -138,12 +146,13 @@ public class WeatherActivity extends AppCompatActivity {
                 drawerLayout.openDrawer(GravityCompat.START);
             }
         });
-        String bingPic = prefs.getString("bing_pic", null);
+
+        /*String bingPic = prefs.getString("bing_pic", null);
         if (bingPic != null) {
             Glide.with(this).load(bingPic).into(bingPicImg);
         } else {
             loadBingPic();
-        }
+        }*/
     }
 
     /**
@@ -188,10 +197,8 @@ public class WeatherActivity extends AppCompatActivity {
         loadBingPic();
     }
 
-    /**
-     * 加载必应每日一图
-     */
-    private void loadBingPic() {
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>加载随机图片<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    /*private void loadBingPic() {
         String requestBingPic = "http://guolin.tech/api/bing_pic";
         HttpUtil.sendOkHttpRequest(requestBingPic, new Callback() {
             @Override
@@ -213,7 +220,29 @@ public class WeatherActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
+    }*/
+
+    private void loadBingPic(){
+
+        ArrayList imageset=new ArrayList();
+        imageset.add(R.drawable.a);imageset.add(R.drawable.b);imageset.add(R.drawable.c);imageset.add(R.drawable.d);
+        imageset.add(R.drawable.e);imageset.add(R.drawable.f);imageset.add(R.drawable.g);imageset.add(R.drawable.h);
+        imageset.add(R.drawable.i);imageset.add(R.drawable.j);imageset.add(R.drawable.k);imageset.add(R.drawable.l);
+        imageset.add(R.drawable.m);imageset.add(R.drawable.n);imageset.add(R.drawable.o);imageset.add(R.drawable.p);
+        imageset.add(R.drawable.q);imageset.add(R.drawable.r);
+
+        //随机得到图片
+        Random random=new Random();
+        int index= random.nextInt(18);
+        imageset.get(index);
+
+        //随机设置背景
+      /* Resources resources = WeatherActivity.this.getResources();
+       Drawable drawable = resources.getDrawable();
+       weatherLayout.setBackground(drawable);*/
+        bingPicImg.setImageResource((Integer) imageset.get(index)); //图片资源
     }
+
 
     /**
      * 处理并展示Weather实体类中的数据。
